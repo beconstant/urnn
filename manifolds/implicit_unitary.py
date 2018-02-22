@@ -47,7 +47,7 @@ class ImplicitUnitary(Manifold):
     Contributors:
     Change log:
     """
-    def __init__(self, n, retr_mode="cayley"):
+    def __init__(self, n, retr_mode="exp"):
         if n <= 0:
             raise ValueError('n must be at least 1')
         if retr_mode not in ["exp"]:
@@ -117,6 +117,8 @@ class ImplicitUnitary(Manifold):
     def retr(self, X, U, mode="default"):
         if mode == "exp":
             return self.exp(X, U)
+        elif mode == "default":
+            return self.retr(X, U, self.retr_mode)
         else:
             raise ValueError('mode must equal to "exp" or "default", but "{}" is given'.format(mode))
 
@@ -126,12 +128,18 @@ class ImplicitUnitary(Manifold):
     def exp(self, X, U):
         # The exponential (in the sense of Lie group theory) of a tangent
         # vector U at X.
-        return skew_hermitian_expm(U)
+        # in implicit form we have unchanged skew-hermitian matrix returned.
+        # for explicit unitary matrix use self.explicit
+        #return skew_hermitian_expm(U)
+        return U
 
     def log(self, X, Y):
         # The logarithm (in the sense of Lie group theory) of Y. This is the
         # inverse of exp.
         raise NotImplementedError
+
+    def explicit(self, U):
+        return skew_hermitian_expm(U)
 
     def rand_np(self):
         return rnd.normal(size=(self._n, self._n))

@@ -12,9 +12,6 @@ from utils.theano_complex_extension import frac, identity, zeros, complex_dot, h
 
 from theano.tensor.shared_randomstreams import RandomStreams
 
-
-
-
 srnd = RandomStreams(rnd.randint(0, 1000))
 
 
